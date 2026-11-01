@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat-Anwendung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .chat-container {
+            max-width: 800px;
+            margin: auto;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            background-color: white;
+            box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+        }
+        .chat-header {
+            background-color: #f3f4f6;
+            padding: 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            border-top-left-radius: 0.5rem;
+            border-top-right-radius: 0.5rem;
+        }
+        .chat-messages {
+            padding: 1rem;
+            height: 400px;
+            overflow-y: auto;
+        }
+        .message {
+            display: flex;
+            margin-bottom: 1rem;
+        }
+        .message-content {
+            background-color: #dcf8c6;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            margin-left: 0.5rem;
+            max-width: 80%;
+        }
+        .message-sender {
+            font-weight: 600;
+            color: #1f2937;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+        .input-container {
+            display: flex;
+            padding: 1rem;
+            border-top: 1px solid #e5e7eb;
+            border-bottom-left-radius: 0.5rem;
+            border-bottom-right-radius: 0.5rem;
+        }
+        .message-input {
+            flex: 1;
+            padding: 0.75rem;
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            margin-right: 0.5rem;
+            font-size: 1rem;
+        }
+        .send-button {
+            background-color: #007bff;
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .send-button:hover {
+            background-color: #0056b3;
+        }
+        .join-notification {
+            font-style: italic;
+            color: #6b7280;
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1 class="text-xl font-semibold text-gray-800">Willkommen im Chat</h1>
+        </div>
+        <div class="chat-messages" id="chat-messages">
+            </div>
+        <div class="input-container">
+            <input type="text" id="message-input" placeholder="Schreibe deine Nachricht..." class="message-input">
+            <button id="send-button" class="send-button">Senden</button>
+        </div>
+    </div>
+
+    <script>
+        const chatMessages = document.getElementById('chat-messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+
+        function sendMessage() {
+            const messageText = messageInput.value.trim();
+            if (messageText === '') return;
+
+            const messageElement = document.createElement('div');
+            messageElement.classList.add('message');
+
+            const messageContentElement = document.createElement('div');
+            messageContentElement.classList.add('message-content');
+            messageContentElement.textContent = messageText;
+
+            const senderElement = document.createElement('span');
+            senderElement.classList.add('message-sender');
+            senderElement.textContent = "Du:"; // Hier könntest du den Namen des Senders einfügen
+
+            messageContentElement.prepend(senderElement);
+            messageElement.appendChild(messageContentElement);
+            chatMessages.appendChild(messageElement);
+            messageInput.value = '';
+            chatMessages.scrollTop = chatMessages.scrollHeight; // Scrollt automatisch nach unten
+        }
+
+        sendButton.addEventListener('click', sendMessage);
+        messageInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Beispiel für eine Systemnachricht (Beitrittsbenachrichtigung)
+        function addJoinNotification(userName) {
+            const notificationElement = document.createElement('div');
+            notificationElement.classList.add('message', 'join-notification');
+            notificationElement.textContent = `${userName} ist dem Chat beigetreten.`;
+            chatMessages.appendChild(notificationElement);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+
+        // Füge eine Beitrittsbenachrichtigung hinzu (simuliert einen Benutzerbeitritt)
+        addJoinNotification("Benutzer1");
+    </script>
+</body>
+</html>
